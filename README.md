@@ -5,6 +5,7 @@ This is a side project website I built that amassed over **120,000 monthly page 
 - [Building the model](#building-the-model)
 - [Acquiring Users](#acquiring-users)
   - [Viral Social Post](#viral-social-post)
+- [Conclusion](#conclusion)
 
 # Background
 There are over 12 million private companies in the US. Unlike public companies, which are required to post quarterly and annual reports, private companies are under no obligation to post any information. This makes it difficult to estimate the size of a private business. There are some tools out there that create estimates using all sorts of techniques but many of these are expensive B2B SaaS products.
@@ -74,8 +75,13 @@ This increase of users can be directly correlated with Google increasingly index
 
 There isn't that initial spike like in the user graph above, since that spike came from Reddit users clicking on the link rather than Google searches.
 
+I also added links and graphs comparing to similar business on each page. These increased engagement and saw users clicking through to multiple businesses before leaving the site.
 
 
+# Conclusion
+The main goal of this project was to get experience building a real-world website. I did everything myself and learned a lot about web development, database scaling, ad markets, SEO, and marketing. 
+
+I ended up shutting down the website because the data was getting more stale everyday -- I was using PPP data from 2020. 
 
 
 
