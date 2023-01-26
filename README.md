@@ -63,7 +63,7 @@ See if you can spot when I had a viral Reddit post about the website.
 I went from having no users to to 2,5000 the day of posting. As you can see, usage sharply decreased shortly after but since my post was one of the top posts of the subreddit, I continued to have between 30-50 daily users. 
 
 ## SEO
-I knew I needed to have a fully fuctional SEO funnel for this to scale. I worked hard to make sure the 12,000,000 pages were all set up correctly and that my Django + Postgresql setup was solid enough to not throw errors when Google was crawling. Because my site was so new, Google would only crawl a couple 100 pages per week. 
+I knew I needed to have a fully fuctional SEO funnel for this to scale. I worked hard to make sure the 12,000,000 pages were all set up correctly and that my Django + Postgresql setup was solid enough to not throw errors when Google was crawling. However, because my site was so new, Google would only crawl a couple 100 pages per week. 
 
 It took a lot of experimenting, submitting massive sitemaps, and building domain authority to get Google to start indexing my pages in any decent quantity. My hard work slowly started to pay off:
 
@@ -81,7 +81,7 @@ I also added links and graphs comparing to similar business on each page. These 
 # Conclusion
 The main goal of this project was to get experience building a real-world website. I did everything myself and learned a lot about web development, database scaling, ad markets, SEO, and marketing. 
 
-I ended up shutting down the website because the data was getting more stale everyday -- I was using PPP data from 2020. 
+I ended up shutting down the website because the data was getting more stale everyday -- I was using PPP data from 2020 -- and wanted to make sure I wasn't grossly misrepresnting someone's business. 
 
 
 
