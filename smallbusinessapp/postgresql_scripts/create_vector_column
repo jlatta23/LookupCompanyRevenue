@@ -1,0 +1,4 @@
+ALTER TABLE smallbusinessapp_businessdata ADD COLUMN ts_simple_industry tsvector 
+   GENERATED ALWAYS AS (to_tsvector('simple', naics_name)) STORED;
+	
+	CREATE INDEX ts_idx_simple_industry ON smallbusinessapp_businessdata USING GIN (ts_simple_industry);

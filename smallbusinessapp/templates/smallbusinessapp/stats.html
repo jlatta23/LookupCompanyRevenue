@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block title %}Lookup Company Revenue, Payroll, and Headcount for over 10 Million Small Businesses{% endblock %}
+{% block adsense %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4889187939045480"
+crossorigin="anonymous"></script>
+{% endblock %}
+{% block description %}
+<meta name="description" content="Find free accurate data for over 10 million small businesses. Powerful search features. Uses novel data sources and state of the art machine learning techniques.">
+{% endblock %}
+    {% block content %}
+    <script src="/static/js/business_search.js"></script>
+    <h2 class="heading" style="text-align:center;margin-bottom:15px;">Free lookup revenue, payroll, and headcount for over 10 million small businesses</h2>
+    <div class="container">
+      <div id="selectors" class="shadow">
+          <div class="row">
+            <div class="col-md-4">
+                <input type="text" id="companyName" class="companyName form-control sel" placeholder="Company Name">
+            </div>
+            <div class="col-md-4">
+                <input type="text" id="industry" class="industry form-control sel" placeholder="Industry">
+            </div>
+            <div class="col-md-4">
+                <select id="states" name="states" class="form-select sel">
+                    <option value="Any">Any State</option>
+                    {% for state in my_states %}
+                    <option value={{state.abbreviation}}>{{state.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <select id="revenueRange" name="revenueRange"class="form-select sel">
+                    <option value="Any">Any Revenue</option>
+                    <option value="over">Over $300 Million</option>
+                    <option value="200000000-300000000">$200-300 Million</option>
+                    <option value="150000000-200000000">$150-200 Million</option>
+                    <option value="100000000-150000000">$100-150 Million</option>
+                    <option value="75000000-100000000">$75-100 Million</option>
+                    <option value="50000000-75000000">$50-75 Million</option>
+                    <option value="25000000-50000000">$25-50 Million</option>
+                    <option value="10000000-25000000">$10-25 Million</option>
+                    <option value="5000000-10000000">$5-10 Million</option>
+                    <option value="2000000-5000000">$2-5 Million</option>
+                    <option value="1000000-2000000">$1-2 Million</option>
+                    <option value="below">Below $1 Million</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select id="employeeRange" name="employeeRange" class="form-select sel">
+                    <option value="Any">Any Employee Count</option>
+                    <option value="over">400+</option>
+                    <option value="300-400">300-400</option>
+                    <option value="200-300">200-300</option>
+                    <option value="100-200">100-200</option>
+                    <option value="50-100">50-100</option>
+                    <option value="25-50">25-50</option>
+                    <option value="10-25">10-25</option>
+                    <option value="2-10">2-10</option>
+                    <option value="below">1</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="number" id="zipCode" placeholder="Zip Code" class="form-control sel">
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <input type="submit" value="Search" id="searchBusinessSubmit" class="btn btn-primary">
+            </div>
+            <div class="col-md-2">
+                <input type="reset" value="Reset" id="resetSearchParameters" class="btn btn-secondary">
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+    <p style="font-size:18px;margin:25px;"><b>*Disclaimer: Revenue and Payroll data are modeled. We make no claim about the accuracy of our modeled revenue and payroll metrics and they are to be used at your own discretion. Employee numbers are directly from reported data to the Government. See FAQ for more information and methodology.</b></p>
+    <p id="numBusinesses"></p>
+    <div class="d-flex justify-content-center" id="tableSpinner">
+    </div>
+    {% load my_filters%}
+    {% load static %}
+    <div class="table-responsive">
+    <table id="resultBusinesses" class="table table-striped table-hover">        
+        <thead class="table-light">
+            <!-- <th class="sortable-column" id="business_name-column">
+              Name
+              <img src="{% static 'icons/up_down_column.svg' %}" alt="Test" width="16" height="16">
+            </th> -->
+            <th>Name</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip Code</th>
+            <!-- <th class="sortable-column" id="revenue_estimate-column" style="border:1px solid black;background-color:#acb6c2;">Revenue          <img src="{% static 'icons/arrow-down.svg' %}" alt="Test" width="16" height="16">
+            </th>
+            <th class="sortable-column" id="num_employees-column">Employees<img src="{% static 'icons/up_down_column.svg' %}" alt="Test" width="16" height="16">
+            </th> -->
+            <th>Revenue*</th>
+            <th>Employees</th>
+            <th  id="payroll-column">Payroll*
+            </th>
+            <th>Industry</th>
+        </thead>
+        <tbody>
+        {% for business in businesses %}
+            <tr id={{business.id}} class="business-row2" data-href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}">
+                <td>
+                    <!-- <span href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="business-span">
+                        {{business.business_name}}
+                    </span>     -->
+                                    <a href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="link-secondary">
+                        {{business.business_name}}
+                    </a>
+                </td>
+                <td>{{business.city}}</td>
+                <td>{{business.state}}</td>
+                <td>{{business.zip_code}}</td>
+                <td>{{business.revenue_estimate | currency}}</td>
+                <td>{{business.num_employees}}</td>
+                <td>{{business.payroll_annual | currency}}</td>
+                <td>{{business.naics_name}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button id = "prevButton" class="btn btn-primary me-md-2" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+              </svg>
+              Previous</button>
+        <button id="nextButton" class="btn btn-primary" type="button">Next
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+              </svg>
+        </button>
+      </div>
+
+</div>
+</div>
+
+    <!-- <script>
+        
+        
+
+        
+
+       
+
+
+    </script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+</div>
+{% endblock %}

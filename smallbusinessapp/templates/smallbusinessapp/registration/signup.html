@@ -1,0 +1,33 @@
+{% extends "base_bare.html" %}
+
+{% block content %}
+<style>
+  .centered {
+    margin: auto;
+    text-align: center;
+  }
+</style>
+<h1 class="centered">Sign up</h1>
+<form method="post" class="col-lg-6 offset-lg-3">
+  {% csrf_token %}
+  <div class="mb-3">
+      {{ form.email.errors }}
+      <label for="{{ form.email.id_for_label }}">Email:</label>
+       {{ form.email }}
+  </div>
+  <div class="mb-3">
+    {{ form.password1.errors }}
+    <label for="{{ form.password1.id_for_label }}">Password:</label>
+     {{ form.password1 }}
+</div>
+<div class="mb-3">
+  {{ form.password2.errors }}
+  <label for="{{ form.password1.id_for_label }}">Confirm password:</label>
+   {{ form.password2 }}
+</div>
+  <button type="submit" class="btn btn-primary">Sign up</button> <br>
+  <a href="/" class="btn btn-secondary" style="margin-top:15px;">Back</a>
+
+</form>
+
+{% endblock %}

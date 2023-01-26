@@ -1,0 +1,18 @@
+{% load my_filters%}
+
+    {% for business in businesses %}
+    <tr id={{business.id}} class="business-row2" data-href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}">
+        <td>
+            <a href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="link-secondary">
+                {{business.business_name}}
+            </a>
+        </td>
+            <td>{{business.city}}</td>
+            <td>{{business.state}}</td>
+            <td>{{business.zip_code}}</td>
+            <td>{{business.revenue_estimate | currency}}</td>
+            <td>{{business.num_employees}}</td>
+            <td>{{business.payroll_annual | currency}}</td>
+            <td>{{business.naics_name}}</td>
+        </tr>
+    {% endfor %}

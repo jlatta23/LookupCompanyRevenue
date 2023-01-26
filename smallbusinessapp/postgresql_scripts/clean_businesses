@@ -1,0 +1,2 @@
+DELETE FROM smallbusinessapp_businessdata
+WHERE payroll_annual < 100

@@ -1,0 +1,500 @@
+{% extends "base.html" %}
+{% block title %}{{business.business_name}} Revenue, Payroll, and Headcount -- Accurate Data{% endblock %}
+{% block adsense %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4889187939045480"
+crossorigin="anonymous"></script>
+{% endblock %}
+{% load my_filters%}
+{% block description %}
+<meta name="description" content="{{business.business_name}} Revenue is {{business.revenue_estimate | currency}}. {{business.address}}. Number of employees is {{business.num_employees}}.">
+{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script src="/static/js/business_search.js"></script>
+<h1 class="heading" style="text-align:center;margin-bottom:15px;">{{business.business_name}}</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <ul class="list-group">
+
+                <li class="list-group-item">
+                    <span><b>City: </b></span>
+                    <span>{{business.city}}</span>
+                </li>                    
+                <li class="list-group-item">
+                    <span><b>State: </b></span>
+                    <span>{{business.state}}</span>
+
+                </li>
+                <li class="list-group-item">
+                    <span><b>Zip Code: </b></span>
+                    <span>{{business.zip_code}}</span>
+                </li>
+                <li class="list-group-item">
+                    <span><b>Business Type: </b></span>
+                    <span>{{business.business_type}}</span>
+                </li>
+                <li class="list-group-item">
+                    <span><b>Percentile: </b></span>
+                    <span>{{business.percentile_industry}}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md">
+            
+            <ul class="list-group">
+
+                <li class="list-group-item border border-primary border-2">                
+                    <span><b>Revenue Estimate*: </b></span>
+                    <span>{{business.revenue_estimate | currency}}</span></li>
+                <li class="list-group-item">
+                    <span><b>Payroll Estimate*: </b></span>
+                    <span>{{business.payroll_annual | currency}}</span>
+
+                </li>
+                <li class="list-group-item">
+                    <span><b>Number of Employees: </b></span>
+                    <span>{{business.num_employees}}</span>
+
+                </li>
+                <li class="list-group-item">
+                    <span><b>Revenue per Employee*: </b></span>
+                    <span>{{revenue_per_employees | currency}}</span>
+                </li>
+                <li class="list-group-item">
+                    <span><b>Industry: </b></span>
+                    <span>{{business.naics_name}}</span>
+
+                </li>
+                <li class="list-group-item">
+                    <span><b>NAICS Code: </b></span>
+                    <span>{{business.naics_code}}</span>
+                </li>
+
+            </ul>
+        </div>
+        <p style="font-size:18px;margin:25px;"><b>*Disclaimer: Revenue and Payroll data are modeled. We make no claim about the accuracy of our modeled revenue and payroll metrics and they are to be used at your own discretion. Employee numbers are directly from reported data to the Government. See FAQ for more information and methodology.</b></p>
+
+    </div>
+    <div class="row">
+        <p>{{business.business_name}} is located in {{business.city}}, {{business.state}}, {{business.zip_code}}. {{business.business_name}} is
+            estimated to have {{business.revenue_estimate | currency}} in revenue per year. 
+            It currently has {{business.num_employees}} employees at the company. {{business.business_name}} is in the {{business.naics_name}}
+            industry, which corresponds to the {{business.naics_code}} NAICS code. 
+            {{business.business_name}} received a Paycheck Protection Program (PPP) loan of {{business.loan_amount | currency}}. 
+            {{business.business_name}} is a {{business.business_type}} type business.
+        </p>
+    </div>
+
+    <div class="row border border-secondary rounded">
+        <div class="row text-center">
+            <h3>Compare {{business.business_name}} to other businesses in the same zip code {{business.zip_code}}</h3>
+        </div>
+        <p>{{business.business_name}} has an estimated annual revenue of {{business.revenue_estimate | currency}} compared to the average {{zip_ind_rev_avg | currency}}, for 
+            "{{business.naics_name}}" business in the same zip code {{business.zip_code}}. 
+        </p>
+        <p>{{business.business_name}} has approximately {{business.num_employees}}
+            employee, compared to the average {{zip_ind_employees_avg}} employees of "{{business.naics_name}}" businesses in the same zip code {{business.zip_code}}.
+        </p>
+        <p>
+            There are {{zip_industry_businesses_count}} total "{{business.naics_name}}" businesses in the zip code {{business.zip_code}}.
+        </p>
+        <div class="col-md">
+            <canvas id="myChartZip">
+
+            </canvas>
+
+                <canvas id="myChartZipEmployees">
+
+                </canvas>
+        </div>    
+        <div class="col-md m-2">
+            <div class="card">
+                <div class="card-header">
+                    Other businesses in the "{{business.naics_name}}" industry also in zip code {{business.zip_code}} ({{zip_industry_businesses_count}} total businesses)
+                </div>
+            <!-- <h6>Other businesses in the "{{business.naics_name}}" industry also in state {{business.state}} ({{state_industry_businesses_count}} total businesses)</h6> -->
+            <div class="card-body>">
+                <ol class="list-group list-group-numbered">
+                    {% for business in zip_industry_businesses %}
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">
+                                <span href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="business-span">
+                                    {{business.business_name}}
+                                </span>
+                                <!-- <a href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="link-secondary">
+                                {{business.business_name}}
+                            </a> -->
+                            </div>
+                            {{business.address}}
+                          </div>
+                          <span class="badge bg-success rounded-pill">{{business.revenue_estimate | currency}}</span>
+                    </li>
+                {% endfor %}
+                </ol>
+            </div>
+            
+            </div>
+        </div>        
+    </div>
+
+    <div class="row border border-secondary rounded">
+        <div class="row text-center">
+            <h3>Compare {{business.business_name}} to other businesses in the same state {{business.state}}</h3>
+        </div>
+        <p>{{business.business_name}} has an estimated annual revenue of {{business.revenue_estimate | currency}} compared to the average {{state_ind_rev_avg | currency}}, for 
+            "{{business.naics_name}}" business in the same state {{business.state}}. 
+        </p>
+        <p>{{business.business_name}} has approximately {{business.num_employees}}
+            employee, compared to the average {{state_ind_employees_avg.avg_employees}} employees of "{{business.naics_name}}" businesses in the same state {{business.state}}.
+        </p>
+        <p>
+            There are {{state_industry_businesses_count}} total "{{business.naics_name}}" businesses in the state {{business.state}}.
+        </p>
+        <div class="col-md m-2">
+            <div class="card">
+                <div class="card-header">
+                    Other businesses in the "{{business.naics_name}}" industry also in state {{business.state}} ({{state_industry_businesses_count}} total businesses)
+                </div>
+            <!-- <h6>Other businesses in the "{{business.naics_name}}" industry also in state {{business.state}} ({{state_industry_businesses_count}} total businesses)</h6> -->
+            <div class="card-body>">
+                <ol class="list-group list-group-numbered">
+                    {% for business in state_industry_businesses %}
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">
+                                <span href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="business-span">
+                                    {{business.business_name}}
+                                </span>
+                                <!-- <a href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="link-secondary">
+                                {{business.business_name}} -->
+                            </a>
+                            </div>
+                            {{business.address}}
+                          </div>
+                          <span class="badge bg-success rounded-pill">{{business.revenue_estimate | currency}}</span>
+                    </li>
+                {% endfor %}
+                </ol>
+            </div>
+            
+            </div>
+        </div>        
+        <div class="col-md">
+            <div class="row">
+                <canvas id="myChartState">
+
+                </canvas>
+            </div>
+            <div class="row">
+                <canvas id="myChartStateEmployees">
+
+                </canvas>
+            </div>
+               
+        </div>    
+    </div>
+    <div class="row border border-secondary rounded">
+        <div class="row text-center">
+            <h3>Compare {{business.business_name}} to other businesses in the United States</h3>
+        </div>
+        <div class="col-md">
+            <div class="row">
+                <p>{{business.business_name}} is in the {{percentile_industry}}th percentile by revenue of all businesses in the "{{business.naics_name}}" industry in the United States</p>
+            </div>
+            <div class="row">
+                <canvas id="myChart">
+
+                </canvas>
+            </div>
+
+        </div>    
+        <div class="col-md m-2">
+            <div class="card">
+                <div class="card-header">
+                    Other businesses in the "{{business.naics_name}}" industry in the United States
+                </div>
+            <!-- <h6>Other businesses in the "{{business.naics_name}}" industry also in state {{business.state}} ({{state_industry_businesses_count}} total businesses)</h6> -->
+            <div class="card-body>">
+                <ol class="list-group list-group-numbered">
+                    {% for business in country_industry_businesses %}
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">
+                                <span href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="business-span">
+                                    {{business.business_name}}
+                                </span>
+                                <!-- <a href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="link-secondary">
+                                {{business.business_name}}
+                            </a> -->
+                            </div>
+                            {{business.address}}
+                          </div>
+                          <span class="badge bg-success rounded-pill">{{business.revenue_estimate | currency}}</span>
+                    </li>
+                {% endfor %}
+                </ol>
+            </div>
+            
+            </div>
+        </div> 
+    </div>
+    <script>
+
+function formatLabel(str, maxwidth){
+    var sections = [];
+    var words = str.split(" ");
+    var temp = "";
+
+    words.forEach(function(item, index){
+        if(temp.length > 0)
+        {
+            var concat = temp + ' ' + item;
+
+            if(concat.length > maxwidth){
+                sections.push(temp);
+                temp = "";
+            }
+            else{
+                if(index == (words.length-1))
+                {
+                    sections.push(concat);
+                    return;
+                }
+                else{
+                    temp = concat;
+                    return;
+                }
+            }
+        }
+
+        if(index == (words.length-1))
+        {
+            sections.push(item);
+            return;
+        }
+
+        if(item.length < maxwidth) {
+            temp = item;
+        }
+        else {
+            sections.push(item);
+        }
+
+    });
+
+    return sections;
+}
+
+        const labels = [
+          formatLabel('{{business.business_name}}', 15),
+          'Average Business'
+        ];
+      const businessRevenue = {{business.revenue_estimate}};
+
+
+      const dataZip = {
+          labels: labels,
+          datasets: [{
+            label: 'Revenue',
+            backgroundColor: ["#0d6efd", "#adb5bd"],
+            borderColor: 'rgb(255, 99, 132)',
+            data: [businessRevenue, {{zip_ind_rev_avg}}],
+          }]
+        };
+      
+
+      
+        const configZip = {
+          type: 'bar',
+          data: dataZip,
+          options: 
+          {
+              plugins:{
+                legends: {display: false},
+              title: {
+                display: true,
+                text: 'Revenue versus Average Similar Business in Zip Code {{business.zip_code}}',
+                font:{size:16}                      
+              }   
+              }
+                         
+            }
+        };
+
+        const myChartZip = new Chart(
+        document.getElementById('myChartZip'),
+        configZip);
+
+    const data = {
+        labels: labels,
+        datasets: [{
+        label: 'Revenue',
+        backgroundColor: ["#0d6efd", "#adb5bd"],
+        borderColor: 'rgb(255, 99, 132)',
+        data: [businessRevenue, {{state_ind_rev_avg}}],
+        }]
+    };
+      
+        const config = {
+          type: 'bar',
+          data: data,
+          options: 
+          {
+              plugins:{
+                legends: {display: false},
+              title: {
+                display: true,
+                text: 'Revenue versus Average Similar Business in State {{business.state}}',
+                font:{size:16}           
+              }   
+              }
+                         
+            }
+        };
+
+        const myChart2 = new Chart(
+        document.getElementById('myChartState'),
+        config);
+
+
+
+
+
+
+
+        const businessEmployees = {{business.num_employees}};
+    const dataStateEmployees = {
+        labels: labels,
+        datasets: [{
+        label: 'Employees',
+        backgroundColor: ["#34b7eb", "#adb5bd"],
+        borderColor: 'rgb(255, 99, 132)',
+        data: [businessEmployees, {{state_ind_employees_avg.avg_employees}}],
+        }]
+    };
+    const configStateEmployees = {
+          type: 'bar',
+          data: dataStateEmployees,
+          options: 
+          {
+              plugins:{
+                legends: {display: false},
+              title: {
+                display: true,
+                text: 'Number of Employees versus Average Similar Business in State {{business.state}}',
+                font:{size:16}           
+              }   
+              }
+                         
+            }
+        };
+        const myChartStateEmployees = new Chart(
+        document.getElementById('myChartStateEmployees'),
+        configStateEmployees);
+
+
+
+    const dataZipEmployees = {
+        labels: labels,
+        datasets: [{
+        label: 'Employees',
+        backgroundColor: ["#34b7eb", "#adb5bd"],
+        borderColor: 'rgb(255, 99, 132)',
+        data: [businessEmployees, {{zip_ind_employees_avg}}],
+        }]
+    };
+    const configZipEmployees = {
+          type: 'bar',
+          data: dataZipEmployees,
+          options: 
+          {
+              plugins:{
+                legends: {display: false},
+              title: {
+                display: true,
+                text: 'Number of Employees versus Average Similar Business in Zip Code {{business.zip_code}}',
+                font:{size:16}           
+              }   
+              }
+                         
+            }
+        };
+        const myChartZipEmployees = new Chart(
+        document.getElementById('myChartZipEmployees'),
+        configZipEmployees);
+
+
+        new Chart('myChart', {
+  type: 'doughnut',
+  plugins: [{
+    afterDraw: chart => {
+      var needleValue = {{business.percentile_industry}}//chart.config.data.datasets[0].needleValue;
+      var dataTotal = chart.config.data.datasets[0].data.reduce((a, b) => a + b, 0);
+      var angle = Math.PI + (1 / dataTotal * needleValue * Math.PI);
+      var ctx = chart.ctx;
+      var cw = chart.canvas.offsetWidth;
+      var ch = chart.canvas.offsetHeight;
+      var cx = cw / 2;
+      var cy = ch - 6;
+
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+      ctx.beginPath();
+      ctx.moveTo(0, -3);
+      ctx.lineTo(ch - 20, 0);
+      ctx.lineTo(0, 3);
+      ctx.fillStyle = 'rgb(0, 0, 0)';
+      ctx.fill();
+      ctx.rotate(-angle);
+      ctx.translate(-cx, -cy);
+      ctx.beginPath();
+      ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }],
+  data: {
+    labels: [],
+    datasets: [{
+      data: [33.3, 33.3, 33.3],
+      needleValue: 27,
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(63, 191, 63, 0.2)'
+      ]
+    }]
+  },
+  options: {
+    plugins:{
+                legends: {display: false},
+              title: {
+                display: true,
+                text: '{{percentile_industry}}th Percentile',//'Revenue Percentile of all Businesses in {{business.naics_name}} in the United States',
+                font:{size:20}
+              }   
+              },
+    responsive: true,
+    aspectRatio: 2,
+    layout: {
+      padding: {
+        bottom: 3
+      },
+    },
+    rotation: -90,
+    cutout: '50%',
+    circumference: 180,
+    legend: {
+      display: false
+    },
+    animation: {
+      animateRotate: false,
+      animateScale: true
+    }
+  }
+});
+      </script>
+
+</div>
+{% endblock %}

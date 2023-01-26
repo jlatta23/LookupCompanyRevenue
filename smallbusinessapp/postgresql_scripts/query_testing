@@ -1,0 +1,6 @@
+	SELECT business_name, smallbusinessapp_businessdata.state, naics_name
+    FROM smallbusinessapp_businessdata
+    WHERE ts_simple @@ to_tsquery('simple', 'slow*')
+    ORDER BY ts_rank(ts_simple, to_tsquery('simple', 'slow*')) DESC
+	LIMIT 30 OFFSET 0;
+	

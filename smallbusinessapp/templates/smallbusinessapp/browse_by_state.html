@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Browse by state. Lookup Company Revenue, Payroll, and Headcount for over 10 Million Small Businesses{% endblock %}
+
+{% block description %}
+<meta name="description" content="Find free accurate data for over 10 million small businesses. Powerful search features. Uses novel data sources and state of the art machine learning techniques.">
+{% endblock %}
+    {% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <h1 class="justify-content-center">Find Business by State - {{state.abbreviation}}</h1>
+    </div>
+    <div class="row">
+        <div class="col">
+            <ul class="list-group list-group-flush">
+                {% for business in businesses|slice:"0:33" %}
+                    <li class="list-group-item">
+                        <a href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="link-secondary">
+                            {{business.business_name}} ({{business.zip_code}})
+                        </a>
+                    </li>
+                {% endfor %} 
+                </ul>
+        </div>
+        <div class="col">
+            <ul class="list-group list-group-flush">
+                {% for business in businesses|slice:"33:66" %}
+                    <li class="list-group-item">
+                        <a href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="link-secondary">
+                            {{business.business_name}} ({{business.zip_code}})
+                        </a>
+                    </li>
+                {% endfor %} 
+                </ul>
+        </div>
+        <div class="col">
+            <ul class="list-group list-group-flush">
+                {% for business in businesses|slice:"66:99" %}
+                    <li class="list-group-item">
+                        <a href="{% url 'business_detail' slug_name=business.slug_name business_id=business.id %}" class="link-secondary">
+                            {{business.business_name}} ({{business.zip_code}})
+                        </a>
+                    </li>
+                {% endfor %} 
+                </ul>
+        </div>
+    </div>
+
+</div>
+
+<nav>
+<ul class="pagination justify-content-center">
+    {% if page == 0 %}
+    <li class="page-item disabled">
+        <a href="#" class="page-link">
+            Previous
+        </a>
+    </li>
+    {% else %} 
+    <li class="page-item">
+        <a href="{% url 'browse' state=state.abbreviation page=prev_page%}" class="page-link">
+            Previous
+        </a>
+      </li>
+    {% endif %}
+
+    {% if is_last_page %}
+    <li class="page-item disabled">
+        <a href="#" class="page-link">
+            Next
+        </a>
+    </li>
+    {% else %}
+    <li class="page-item">
+        <a href="{% url 'browse' state=state.abbreviation page=next_page%}" class="page-link">
+            Next
+        </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}

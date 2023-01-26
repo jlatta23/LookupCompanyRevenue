@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}FAQ{% endblock %}
+{% block content %}
+<h1 style="text-align:center;">Frequently Asked Questions</h1> 
+<ol class="list-group list-group-numbered" style="width:75%;margin:auto;">
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="ms-2 me-auto">
+      <div class="fw-bold">What is the purpose of this website?</div>
+      While public companies are required to report their revenue every quarter, private businesses have no such obligation, making it hard to 
+      know the size of a private company.
+      We have used novel <b>freely available, public</b> data sources to create models 
+      of company revenue, payroll, and number of employees. 
+    </div>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="ms-2 me-auto">
+      <div class="fw-bold">What businesses can be found in the database?</div>
+      We have over 10 million small businesses accessible in the database. A small business is defined as one that has less than 500 employees.
+      If you want to know if we have data on a business, just look it up and see.
+    </div>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Where does your data come from?</div>
+        We have obtained novel data sources from the US Government using the Freedom of Information Act. Our Revenue and Payroll estimates
+        are modeled from this data and the employee numbers come from data directly reported from the business to the Government.
+      </div>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">How do you model revenue?</div>
+        We use a machine learning model that uses company payroll and employee data and specific industry productivity rates from the Bureau of Labor Statistics (BLS)
+        to estimate a company's revenue. We make no claim about the accuracy of our modeled revenue metrics and they are to be used at your own discretion.
+      </div>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">How do you model payroll?</div>
+        We use a model based on the reported data to the Government. For businesses that have a lot of high paid ($100,000+) employees, 
+        the payroll estimates will probably be lower.
+        We make no claim about the accuracy of our modeled payroll metrics and they are to be used at your own discretion.
+      </div>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">How do you get your number of employees data?</div>
+        This data comes directly from information businesses reported to the Government when receiving a loan. 
+        The data was reported about 1-2 years ago.
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Please take my data down</div>
+        Send an email to the Contact Us address at the bottom of the page.
+    </li>
+  </ol>
+
+  {% endblock %}

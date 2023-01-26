@@ -1,0 +1,5 @@
+SELECT * FROM smallbusinessapp_businessdata
+WHERE id = 996546;
+
+DELETE FROM smallbusinessapp_businessdata
+WHERE id = 996546

@@ -1,0 +1,10 @@
+-- DELETE FROM smallbusinessapp_businessdata
+-- WHERE zip_code = '';
+-- SELECT split_part(zip_code, '-', 1)::INTEGER AS zip_code_int FROM smallbusinessapp_businessdata;
+
+UPDATE smallbusinessapp_businessdata
+SET zip_code_int = split_part(zip_code, '-', 1)::INTEGER
+WHERE id >= 1000 AND id <= 500000
+-- SELECT * FROM smallbusinessapp_businessdata WHERE zip_code_int > 1 LIMIT 20;
+
+--SELECT COUNT(*) FROM smallbusinessapp_businessdata WHERE id > 10000000

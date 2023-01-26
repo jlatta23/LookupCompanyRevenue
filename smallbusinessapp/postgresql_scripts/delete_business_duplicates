@@ -1,0 +1,6 @@
+DELETE FROM smallbusinessapp_businessdata T1
+	USING smallbusinessapp_businessdata T2
+WHERE T1.ctid < T2.ctid 
+AND T1.business_name = T2.business_name
+AND T1.zip_code = T2.zip_code
+AND T1.naics_name = T2.naics_name

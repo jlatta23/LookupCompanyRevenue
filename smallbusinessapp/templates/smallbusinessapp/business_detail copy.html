@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}{{business.business_name}} Revenue, Payroll, and Headcount -- Accurate Data{% endblock %}
+
+{% load my_filters%}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<h2 class="heading" style="text-align:center;margin-bottom:15px;">{{business.business_name}}</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <ul class="list-group">
+
+                <li class="list-group-item">                
+                    <span><b>Address: </b></span>
+                    <span>{{business.address}}</span></li>
+                <li class="list-group-item">
+                    <span><b>State: </b></span>
+                    <span>{{business.state}}</span>
+
+                </li>
+                <li class="list-group-item">
+                    <span><b>Zip Code: </b></span>
+                    <span>{{business.zip_code_int}}</span>
+
+                </li>
+                <li class="list-group-item">
+                    <span><b>City: </b></span>
+                    <span>{{business.city}}</span>
+
+                </li>
+            </ul>
+        </div>
+        <div class="col-md">
+            
+            <ul class="list-group">
+
+                <li class="list-group-item list-group-item-primary">                
+                    <span><b>Revenue Estimate: </b></span>
+                    <span>{{business.revenue_estimate | currency}}</span></li>
+                <li class="list-group-item">
+                    <span><b>Revenue Confidence: </b></span>
+                    <span>{{business.revenue_confidence}}</span>
+
+                </li>
+                <li class="list-group-item">
+                    <span><b>Number of Employees: </b></span>
+                    <span>{{business.num_employees}}</span>
+
+                </li>
+                <li class="list-group-item">
+                    <span><b>Industry: </b></span>
+                    <span>{{business.naics_name}}</span>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+
+    <div class="row" style="border-style:solid;">
+            <div class="col-md">
+                    <canvas id="myChart">
+
+                    </canvas>
+            </div>
+            
+            <div class="col-md">
+                <h6>Other businesses in the "{{business.naics_name}}" industry also in {{business.zip_code_int}}</h6>
+                <ol class="list-group list-group-numbered">
+                    {% for business in zip_code_industry_businesses %}
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">
+                                <a href="{% url 'business_detail' business_id=business.id %}" class="link-secondary">
+                                {{business.business_name}}
+                            </a>
+                            </div>
+                            {{business.address}}
+                          </div>
+                          <span class="badge bg-primary rounded-pill">{{business.revenue_estimate | currency}}</span>
+                    </li>
+                {% endfor %}
+                </ol>
+            </div>
+    </div>
+
+    <div class="row" style="border-style:solid;">
+        <div class="col-md">
+            <h6>Other businesses in the "{{business.naics_name}}" industry also in state {{business.state}} ({{state_industry_businesses_count}} total businesses)</h6>
+            <ol class="list-group list-group-numbered">
+                {% for business in state_industry_businesses %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">
+                            <a href="{% url 'business_detail' business_id=business.id %}" class="link-secondary">
+                            {{business.business_name}}
+                        </a>
+                        </div>
+                        {{business.address}}
+                      </div>
+                      <span class="badge bg-primary rounded-pill">{{business.revenue_estimate | currency}}</span>
+                </li>
+            {% endfor %}
+            </ol>
+        </div>        
+        <div class="col-md">
+                <canvas id="myChart2">
+
+                </canvas>
+        </div>
+    
+</div>
+    <script>
+        const labels = [
+          '{{business.business_name}}',
+          'Average Business'
+        ];
+      const businessRevenue = {{business.revenue_estimate}};
+        const data = {
+          labels: labels,
+          datasets: [{
+            label: 'Revenue',
+            backgroundColor: ["#3e95cd", "#8e5ea2"],
+            borderColor: 'rgb(255, 99, 132)',
+            data: [businessRevenue, {{state_ind_rev_avg.avg_revenue}}],
+          }]
+        };
+      
+        const config = {
+          type: 'bar',
+          data: data,
+          options: 
+          {
+              plugins:{
+                legends: {display: false},
+              title: {
+                display: true,
+                text: 'Revenue versus Average Similar Business in Zip Code'                
+              }   
+              }
+                         
+            }
+        };
+
+        const myChart = new Chart(
+document.getElementById('myChart'),
+config
+);
+
+const myChart2 = new Chart(
+document.getElementById('myChart2'),
+config
+);
+      </script>
+
+</div>
+{% endblock %}
