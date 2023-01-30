@@ -5,6 +5,7 @@ This is a side project website I built that amassed over **120,000 monthly page 
 - [Building the model](#building-the-model)
 - [Acquiring Users](#acquiring-users)
   - [Viral Social Post](#viral-social-post)
+  - [SEO](#seo)
 - [Conclusion](#conclusion)
 
 # Background
